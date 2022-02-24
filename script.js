@@ -1,9 +1,40 @@
 var root = document.querySelector(".box.parent");
 var angle_range = document.querySelector("input");
 var initial_angle = 15;
-console.log(root);
-console.log("nodes");
-var nodes = [];
+var nodes = [
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+  [1, null],
+];
 
 var tree = [];
 
@@ -58,7 +89,8 @@ function initializeTree() {
 
 function buildVizualizer() {
   var temp_nodes = tree;
-
+  temp_nodes[0][0] = [temp_nodes[0][0], 0, 0];
+  var exp = 1;
   while (temp_nodes.length > 0) {
     var temp_boxes = [];
     var temp = temp_nodes;
@@ -68,33 +100,50 @@ function buildVizualizer() {
       if (parent_node[1] == null) {
         return;
       }
+
+      var node_number = parent_node[0][2] * 2;
+
       parent_node[1].forEach((node) => {
         var angle = count % 2 == 0 ? initial_angle : initial_angle * -1;
         count++;
-
+        var number = node_number + 1;
+        var num = number > exp ? number - exp - 1 : exp - number;
+        if (exp > 2) {
+          var times = Math.floor(num / 4) * 3;
+          times = times == 0 ? 1 : times;
+          if (exp > 8) {
+            times = 1;
+          }
+          angle +=
+            number > exp ? initial_angle * times * -1 : initial_angle * times;
+        }
         var box_id = boxes.findIndex((x) => {
-          return x[0] == parent_node[0];
+          return x[0] == parent_node[0][0];
         });
 
-        temp_boxes.push([node[0], addNode(boxes[box_id][1], node[0], angle)]);
+        temp_boxes.push(
+          [node[0], addNode(boxes[box_id][1], node[0], angle, 0)],
+          num
+        );
 
         if (boxes[box_id][1].children.length >= 2) {
           boxes.splice(box_id, 1);
         }
 
         if (node[1] != null) {
-          temp_nodes.push(node);
+          temp_nodes.push([[node[0], num, node_number], node[1]]);
         }
+        node_number++;
       });
     });
 
     count = 0;
     boxes = temp_boxes;
+    exp = exp << 1;
   }
 }
 
-function addNode(node, num, angle) {
-  console.log("addNode", num, angle);
+function addNode(node, num, angle, height) {
   var parent = document.createElement("div");
   parent.className = "labels";
 
@@ -117,7 +166,7 @@ function addNode(node, num, angle) {
   node.appendChild(parent);
 
   setTimeout(() => {
-    line.style.height = "100px";
+    line.style.height = `${150 - height}px`;
     setTimeout(() => {
       label.style.width = "50px";
       label.style.height = "50px";
@@ -163,7 +212,6 @@ angle_range.addEventListener("input", (e) => {
 });
 
 function rebuildTree() {
-  console.log("rebuildTree", root);
   if (root.children.length > 0) {
     while (root.firstChild != null) {
       root.removeChild(root.firstChild);
@@ -191,7 +239,7 @@ function addCard() {
     receiveInput(e.target);
   });
 }
-
+rebuildTree();
 var inputs = {};
 
 function receiveInput(e) {
