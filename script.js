@@ -1,40 +1,7 @@
 var root = document.querySelector(".box.parent");
 var angle_range = document.querySelector("input");
 var initial_angle = 15;
-var nodes = [
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-  [1, null],
-];
+var nodes = [];
 
 var tree = [];
 
@@ -239,7 +206,6 @@ function addCard() {
     receiveInput(e.target);
   });
 }
-rebuildTree();
 var inputs = {};
 
 function receiveInput(e) {
